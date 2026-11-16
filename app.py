@@ -46,15 +46,21 @@ def detect_lanes(image):
     line_image = np.zeros_like(image)
 
     if lines is not None:
-        for line in lines:
-            x1, y1, x2, y2 = line[0]
-            cv2.line(
-                line_image,
-                (x1, y1),
-                (x2, y2),
-                (0, 255, 0),
-                10
-            )
+       for line in lines:
+    coordinates = np.asarray(line).reshape(-1)
+
+    if coordinates.size < 4:
+        continue
+
+    x1, y1, x2, y2 = map(int, coordinates[:4])
+
+    cv2.line(
+        line_image,
+        (x1, y1),
+        (x2, y2),
+        (0, 255, 0),
+        10
+    )
 
     result = cv2.addWeighted(image, 0.8, line_image, 1, 0)
 
